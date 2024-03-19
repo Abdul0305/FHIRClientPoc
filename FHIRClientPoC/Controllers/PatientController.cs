@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 public class PatientController : ControllerBase
 {
     private readonly FhirClient _fhirClient;
-    
+
     public PatientController()
     {
         _fhirClient = new FhirClient(new Uri("http://localhost:8090/fhir"));
@@ -25,15 +25,15 @@ public class PatientController : ControllerBase
                 BirthDate = patientDto.BirthDate,
                 Telecom = new List<ContactPoint> { new ContactPoint { Value = patientDto.Email } },
                 Address = new List<Address>
-            {
-                new Address
                 {
-                    Line = new List<string> { patientDto.AddressLine },
-                    City = patientDto.City,
-                    PostalCode = patientDto.PostalCode,
-                    Country = patientDto.Country
-                }
-            },
+                    new Address
+                    {
+                        Line = new List<string> { patientDto.AddressLine },
+                        City = patientDto.City,
+                        PostalCode = patientDto.PostalCode,
+                        Country = patientDto.Country
+                    }
+                },
                 MaritalStatus = new CodeableConcept { Text = patientDto.MaritalStatus }
             };
 
@@ -76,15 +76,15 @@ public class PatientController : ControllerBase
             existingPatient.BirthDate = patientDto.BirthDate;
             existingPatient.Telecom = new List<ContactPoint> { new ContactPoint { Value = patientDto.Email } };
             existingPatient.Address = new List<Address>
-        {
-            new Address
             {
-                Line = new List<string> { patientDto.AddressLine },
-                City = patientDto.City,
-                PostalCode = patientDto.PostalCode,
-                Country = patientDto.Country
-            }
-        };
+                new Address
+                {
+                    Line = new List<string> { patientDto.AddressLine },
+                    City = patientDto.City,
+                    PostalCode = patientDto.PostalCode,
+                    Country = patientDto.Country
+                }
+            };
             existingPatient.MaritalStatus = new CodeableConcept { Text = patientDto.MaritalStatus };
 
             var updatedPatient = await _fhirClient.UpdateAsync(existingPatient);
@@ -127,7 +127,7 @@ public class PatientController : ControllerBase
                 .Select(e => (Patient)e.Resource)
                 .Select(p => new PatientResponseDto
                 {
-                    Id= p.Id,
+                    Id = p.Id,
                     Name = p.Name.FirstOrDefault()?.Text,
                     Gender = p.Gender.ToString(),
                     BirthDate = p.BirthDate,
